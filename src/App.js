@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Logo from './Logo';
 import './App.css';
 
 class App extends Component {
+  static requestData() {
+    return fetch('http://localhost:8000/api/data')
+      .then(res => res.json())
+      .then(data => {
+        return data.items;
+      }).catch(err => {
+        console.log('err', err);
+      });
+  }
+  
   render() {
+    const data = this.props.data || [];
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <Logo className="App-logo"/>
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
@@ -19,6 +30,14 @@ class App extends Component {
           >
             Learn React
           </a>
+          <button onClick={() => {console.log('click')}}>
+            Click me!
+          </button>
+          <ul>
+            {data.map(chunk => (
+              <li key={chunk.id}>{chunk.todo}</li>
+            ))}
+          </ul>
         </header>
       </div>
     );
